@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(open \"/Users/ilgrandecapo/Desktop/compleanno giulia/index.html\")",
+      "Bash(gh auth:*)",
+      "Bash(git --version)",
+      "Bash(brew install:*)",
+      "Read(//private/tmp/**)",
+      "Bash(unzip -o gh.zip)",
+      "Bash(ls gh_*/bin/gh)",
+      "Bash(mkdir -p ~/bin)",
+      "Bash(cp /tmp/gh_2.89.0_macOS_arm64/bin/gh ~/bin/gh)",
+      "Bash(chmod +x ~/bin/gh)",
+      "Bash(export PATH=\"$HOME/bin:$PATH\")",
+      "Bash(~/bin/gh --version)",
+      "Bash(~/bin/gh auth:*)"
+    ]
+  }
+}

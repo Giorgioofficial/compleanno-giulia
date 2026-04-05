@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buon Compleanno Giulia!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Quicksand:wght@300;400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            background: linear-gradient(135deg, #1a0a2e, #2d1b69, #1a0a2e);
+            overflow: hidden;
+            font-family: 'Quicksand', sans-serif;
+            color: #fff;
+        }
+
+        /* ============================
+           CUORICINI 3D
+        ============================ */
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+            perspective: 800px;
+        }
+
+        .heart {
+            position: absolute;
+            bottom: -60px;
+            animation: floatUp3D linear infinite;
+            opacity: 0;
+        }
+
+        .heart::before {
+            content: '';
+            display: block;
+            width: var(--size);
+            height: var(--size);
+            background: var(--color);
+            transform: rotate(45deg);
+            border-radius: 50% 50% 0 50%;
+            box-shadow: 0 0 8px var(--color), 0 0 16px var(--color);
+        }
+
+        .heart::after {
+            content: '';
+            display: block;
+            width: var(--size);
+            height: var(--size);
+            background: var(--color);
+            position: absolute;
+            top: 0;
+            left: calc(var(--size) * -0.35);
+            transform: rotate(45deg);
+            border-radius: 50% 50% 50% 0;
+            box-shadow: 0 0 8px var(--color), 0 0 16px var(--color);
+        }
+
+        @keyframes floatUp3D {
+            0% {
+                transform: translateY(0) translateX(0) translateZ(var(--z)) rotateX(0deg) rotateY(0deg) scale(0.3);
+                opacity: 0;
+            }
+            8% {
+                opacity: var(--max-opacity);
+            }
+            50% {
+                opacity: var(--max-opacity);
+                transform: translateY(-55vh) translateX(var(--drift)) translateZ(var(--z)) rotateX(180deg) rotateY(180deg) scale(var(--end-scale));
+            }
+            90% {
+                opacity: 0.15;
+            }
+            100% {
+                transform: translateY(-115vh) translateX(var(--drift2)) translateZ(var(--z)) rotateX(360deg) rotateY(360deg) scale(var(--end-scale));
+                opacity: 0;
+            }
+        }
+
+        /* ============================
+           STEP 1 - COUNTDOWN
+        ============================ */
+        #step-countdown {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1s ease;
+        }
+
+        #step-countdown.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .cd-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            color: #ffa8cc;
+            margin-bottom: 50px;
+            text-align: center;
+            letter-spacing: 2px;
+            animation: softPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes softPulse {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.03); }
+        }
+
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .countdown-block {
+            background: rgba(255, 107, 157, 0.08);
+            border: 1px solid rgba(255, 107, 157, 0.25);
+            border-radius: 20px;
+            padding: 20px 30px;
+            min-width: 110px;
+            backdrop-filter: blur(10px);
+        }
+
+        .countdown-number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #ff6b9d;
+            font-family: 'Dancing Script', cursive;
+            line-height: 1;
+        }
+
+        .countdown-unit {
+            font-size: 0.7rem;
+            color: #c9a8e8;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-top: 8px;
+        }
+
+        /* ============================
+           STEP 2 - SCRITTA GRANDE
+        ============================ */
+        #step-message {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.5s ease;
+        }
+
+        #step-message.show {
+            opacity: 1;
+        }
+
+        #step-message.hide {
+            opacity: 0;
+        }
+
+        .big-message {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2.2rem, 7vw, 5rem);
+            text-align: center;
+            line-height: 1.4;
+            padding: 0 30px;
+            background: linear-gradient(90deg, #ff6b9d, #ffa8cc, #ff6b9d, #c44dff, #ff6b9d);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px rgba(255, 107, 157, 0.4));
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* ============================
+           STEP 3 - IMMAGINI FLOTTANTI
+        ============================ */
+        #step-gallery {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 5;
+            overflow: hidden;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 2s ease;
+        }
+
+        #step-gallery.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .floating-image {
+            position: absolute;
+            border-radius: 3px;
+            overflow: visible;
+            animation: floatImage linear forwards;
+            opacity: 0;
+            /* Stile polaroid / foto stampata vecchia */
+            background: #f5f0e8;
+            padding: 10px 10px 40px 10px;
+            box-shadow:
+                0 4px 20px rgba(0, 0, 0, 0.5),
+                inset 0 0 30px rgba(0, 0, 0, 0.03),
+                0 0 15px rgba(255, 107, 157, 0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        /* Effetto ingiallito sui bordi */
+        .floating-image::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 3px;
+            background: linear-gradient(
+                135deg,
+                rgba(180, 150, 100, 0.15) 0%,
+                transparent 30%,
+                transparent 70%,
+                rgba(180, 150, 100, 0.1) 100%
+            );
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .floating-image .photo-area {
+            width: 100%;
+            height: calc(100% - 40px);
+            overflow: hidden;
+            background: #1a0a2e;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .floating-image img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center center;
+            filter: sepia(0.15) saturate(0.9) contrast(1.05);
+        }
+
+        .floating-image .polaroid-caption {
+            width: 100%;
+            text-align: center;
+            padding-top: 8px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 0.9rem;
+            color: #5a4a3a;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .floating-image .img-placeholder {
+            text-align: center;
+            padding: 15px;
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #2d1b69, #1a0a2e);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .img-placeholder .ph-icon {
+            font-size: 45px;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .img-placeholder .ph-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 0.95rem;
+            color: #ffa8cc;
+        }
+
+        @keyframes floatImage {
+            0% {
+                transform: translateY(100vh) rotate(var(--rot-start)) scale(0.5);
+                opacity: 0;
+            }
+            5% {
+                opacity: 1;
+                transform: translateY(90vh) rotate(var(--rot-start)) scale(0.9);
+            }
+            15% {
+                opacity: 1;
+                transform: translateY(70vh) rotate(var(--rot-mid)) scale(1);
+            }
+            85% {
+                opacity: 1;
+                transform: translateY(-70vh) rotate(var(--rot-end)) scale(1);
+            }
+            95% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-120vh) rotate(var(--rot-end)) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        /* Sparkles */
+        .sparkle {
+            position: fixed;
+            width: 3px;
+            height: 3px;
+            background: #fff;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            animation: sparkle 2.5s ease-in-out infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 0.8; transform: scale(1); }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .countdown-block {
+                min-width: 80px;
+                padding: 15px 20px;
+            }
+            .countdown-number {
+                font-size: 2.5rem;
+            }
+            .floating-image {
+                width: 140px !important;
+                height: 180px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CUORICINI 3D - SEMPRE VISIBILI -->
+    <div class="hearts-container" id="heartsContainer"></div>
+
+    <!-- STEP 1: COUNTDOWN -->
+    <div id="step-countdown">
+        <p class="cd-title">Il compleanno di Giulia arriva tra...</p>
+        <div class="countdown-timer">
+            <div class="countdown-block">
+                <div class="countdown-number" id="cd-hours">00</div>
+                <div class="countdown-unit">Ore</div>
+            </div>
+            <div class="countdown-block">
+                <div class="countdown-number" id="cd-minutes">00</div>
+                <div class="countdown-unit">Minuti</div>
+            </div>
+            <div class="countdown-block">
+                <div class="countdown-number" id="cd-seconds">00</div>
+                <div class="countdown-unit">Secondi</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 2: SCRITTA GRANDE -->
+    <div id="step-message">
+        <h1 class="big-message">Buon Compleanno<br>alla mia Sorellina!</h1>
+    </div>
+
+    <!-- STEP 3: IMMAGINI FLOTTANTI -->
+    <div id="step-gallery"></div>
+
+    <script>
+        // ============================
+        // CUORICINI 3D
+        // ============================
+        const heartsContainer = document.getElementById('heartsContainer');
+        const heartColors = [
+            '#ff6b9d', '#ff85b3', '#ffa8cc', '#c44dff',
+            '#ff4081', '#e91e63', '#f48fb1', '#ce93d8',
+            '#ff1744', '#ff5252', '#ea80fc', '#f06292'
+        ];
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+
+            const size = Math.random() * 16 + 6;
+            const color = heartColors[Math.floor(Math.random() * heartColors.length)];
+            const left = Math.random() * 100;
+            const duration = Math.random() * 7 + 5;
+            const drift = (Math.random() - 0.5) * 250;
+            const drift2 = (Math.random() - 0.5) * 300;
+            const delay = Math.random() * 1.5;
+            const z = (Math.random() - 0.5) * 400;
+            const maxOpacity = Math.random() * 0.4 + 0.4;
+            const endScale = Math.random() * 0.6 + 0.7;
+
+            heart.style.setProperty('--size', size + 'px');
+            heart.style.setProperty('--color', color);
+            heart.style.setProperty('--drift', drift + 'px');
+            heart.style.setProperty('--drift2', drift2 + 'px');
+            heart.style.setProperty('--z', z + 'px');
+            heart.style.setProperty('--max-opacity', maxOpacity);
+            heart.style.setProperty('--end-scale', endScale);
+            heart.style.left = left + '%';
+            heart.style.animationDuration = duration + 's';
+            heart.style.animationDelay = delay + 's';
+
+            heartsContainer.appendChild(heart);
+            setTimeout(() => heart.remove(), (duration + delay) * 1000);
+        }
+
+        // Cuoricini costanti
+        setInterval(createHeart, 200);
+        for (let i = 0; i < 25; i++) {
+            setTimeout(createHeart, i * 80);
+        }
+
+        // Sparkles
+        for (let i = 0; i < 40; i++) {
+            const sparkle = document.createElement('div');
+            sparkle.classList.add('sparkle');
+            sparkle.style.left = Math.random() * 100 + '%';
+            sparkle.style.top = Math.random() * 100 + '%';
+            sparkle.style.animationDelay = Math.random() * 4 + 's';
+            sparkle.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            document.body.appendChild(sparkle);
+        }
+
+        // ============================
+        // STEP MANAGER
+        // ============================
+        const stepCountdown = document.getElementById('step-countdown');
+        const stepMessage = document.getElementById('step-message');
+        const stepGallery = document.getElementById('step-gallery');
+
+        let countdownFinished = false;
+        let countdownInterval;
+
+        // TEST: countdown di 5 secondi da quando apri la pagina
+        // Quando sei pronto per il compleanno vero, sostituisci con:
+        // const testBirthday = new Date('2026-04-06T00:00:00');
+        const testBirthday = new Date(Date.now() + 5000);
+
+        function updateCountdown() {
+            const birthday = testBirthday;
+            const now = new Date();
+            const diff = birthday - now;
+
+            if (diff <= 0) {
+                if (!countdownFinished) {
+                    countdownFinished = true;
+                    clearInterval(countdownInterval);
+                    triggerStep2();
+                }
+                return;
+            }
+
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('cd-minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('cd-seconds').textContent = String(seconds).padStart(2, '0');
+        }
+
+        updateCountdown();
+        countdownInterval = setInterval(updateCountdown, 1000);
+
+        // ============================
+        // STEP 2 - SCRITTA GRANDE
+        // ============================
+        function triggerStep2() {
+            // Nascondi countdown
+            stepCountdown.classList.add('hide');
+
+            // Dopo che il countdown e' svanito, mostra la scritta
+            setTimeout(() => {
+                stepCountdown.style.display = 'none';
+                stepMessage.classList.add('show');
+
+                // Dopo 7 secondi, nascondi la scritta e vai allo step 3
+                setTimeout(() => {
+                    stepMessage.classList.remove('show');
+                    stepMessage.classList.add('hide');
+
+                    setTimeout(() => {
+                        stepMessage.style.display = 'none';
+                        triggerStep3();
+                    }, 1500);
+                }, 7000);
+            }, 1200);
+        }
+
+        // ============================
+        // STEP 3 - IMMAGINI FLOTTANTI
+        // ============================
+        const imageData = [
+            { icon: '🎉', text: 'Auguri!' },
+            { icon: '💖', text: 'Ti voglio bene' },
+            { icon: '🥳', text: 'Che festa!' },
+            { icon: '🌟', text: 'Sei speciale' },
+            { icon: '🎁', text: 'Sorpresa!' },
+            { icon: '🦋', text: 'Vola alto' },
+            { icon: '🌸', text: 'Bellissima' },
+            { icon: '✨', text: 'Magica' },
+            { icon: '🎂', text: 'Tanti auguri' },
+            { icon: '💫', text: 'Splendi sempre' },
+            { icon: '🌈', text: 'Arcobaleno' },
+            { icon: '🎀', text: 'Per te!' }
+        ];
+
+        const fotoReali = [
+            '2324A856-82EA-4D1F-B01F-AB5656B2EE01.JPG',
+            '2a347460-962a-4b1f-959f-8af739568383.JPG',
+            '656149344_18096530612075414_8554192259662585790_n.jpg',
+            'ef9f356a-aa7a-41b2-9cf4-99b442fb2c6b.JPG',
+            'IMG_0817.JPG',
+            'IMG_0820.JPG',
+            'IMG_1305.JPG',
+            'IMG_2804.JPG',
+            'IMG_6066.JPG'
+        ];
+
+        const videoReali = [];
+
+        // Shuffle dei media: mostra tutte le foto una volta prima di ripetere
+        const allMedia = [...fotoReali, ...videoReali];
+        let mediaQueue = [];
+
+        function shuffleArray(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function getNextMedia() {
+            if (mediaQueue.length === 0) {
+                mediaQueue = shuffleArray(allMedia);
+            }
+            return mediaQueue.pop();
+        }
+
+        // Traccia posizioni attive per evitare sovrapposizioni
+        let activePositions = [];
+
+        function findFreeLeft(w) {
+            const screenW = window.innerWidth;
+            const margin = 30;
+            // Prova fino a 20 volte a trovare una posizione libera
+            for (let attempt = 0; attempt < 20; attempt++) {
+                const left = Math.random() * (screenW - w - margin * 2) + margin;
+                const right = left + w;
+                let overlap = false;
+                for (const pos of activePositions) {
+                    // Controlla se c'e' sovrapposizione orizzontale
+                    if (left < pos.right + margin && right > pos.left - margin) {
+                        overlap = true;
+                        break;
+                    }
+                }
+                if (!overlap) return left;
+            }
+            // Fallback: posizione random
+            return Math.random() * (screenW - w - margin * 2) + margin;
+        }
+
+        function createFloatingImage() {
+            const img = document.createElement('div');
+            img.classList.add('floating-image');
+
+            const w = Math.random() * 60 + 150;
+            const h = w * (Math.random() * 0.3 + 1);
+            const left = findFreeLeft(w);
+
+            // Registra la posizione attiva
+            const posRecord = { left: left, right: left + w };
+            activePositions.push(posRecord);
+
+            const duration = Math.random() * 6 + 12;
+            const rotStart = (Math.random() - 0.5) * 10;
+            const rotMid = (Math.random() - 0.5) * 5;
+            const rotEnd = (Math.random() - 0.5) * 10;
+
+            img.style.width = w + 'px';
+            img.style.height = h + 'px';
+            img.style.left = left + 'px';
+            img.style.bottom = '-' + (h + 50) + 'px';
+            img.style.setProperty('--rot-start', rotStart + 'deg');
+            img.style.setProperty('--rot-mid', rotMid + 'deg');
+            img.style.setProperty('--rot-end', rotEnd + 'deg');
+            img.style.animationDuration = duration + 's';
+            img.style.animationDelay = '0s';
+
+            const captionIdx = Math.floor(Math.random() * imageData.length);
+            const data = imageData[captionIdx];
+            const file = getNextMedia();
+            const isVideo = file.endsWith('.MOV') || file.endsWith('.mp4') || file.endsWith('.mov');
+
+            if (isVideo) {
+                img.innerHTML = `
+                    <div class="photo-area"><video src="${file}" autoplay muted loop playsinline style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;filter:sepia(0.15) saturate(0.9) contrast(1.05);"></video></div>
+                    <div class="polaroid-caption">${data.text}</div>
+                `;
+            } else {
+                img.innerHTML = `
+                    <div class="photo-area"><img src="${file}" alt="Foto"></div>
+                    <div class="polaroid-caption">${data.text}</div>
+                `;
+            }
+
+            stepGallery.appendChild(img);
+
+            // Rimuovi posizione attiva dopo che l'immagine e' salita abbastanza
+            setTimeout(() => {
+                activePositions = activePositions.filter(p => p !== posRecord);
+            }, 4000);
+
+            setTimeout(() => img.remove(), duration * 1000);
+        }
+
+        function scheduleNextImage() {
+            const nextDelay = Math.random() * 3000 + 2500;
+            setTimeout(() => {
+                createFloatingImage();
+                scheduleNextImage();
+            }, nextDelay);
+        }
+
+        function triggerStep3() {
+            stepGallery.classList.add('show');
+
+            // Una sola immagine subito, le altre a tempi ben distanziati
+            createFloatingImage();
+            setTimeout(createFloatingImage, 3000);
+
+            // Da qui in poi, una alla volta a tempi random
+            setTimeout(scheduleNextImage, 5500);
+        }
+
+        // ============================
+        // PER TESTING: premi SPAZIO per
+        // saltare direttamente allo step 2
+        // (rimuovi in produzione)
+        // ============================
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && !countdownFinished) {
+                e.preventDefault();
+                countdownFinished = true;
+                clearInterval(countdownInterval);
+                triggerStep2();
+            }
+        });
+    </script>
+
+</body>
+</html>
